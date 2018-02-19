@@ -30,7 +30,4 @@ cd $BASEDIR/kubernetes
 git checkout origin/$WIN_E2E_KUBE_BRANCH -b win_e2e_testing
 
 
-echo "Building Kubernetes"
-
-$BASEDIR/kubernetes/build/run.sh make all
 

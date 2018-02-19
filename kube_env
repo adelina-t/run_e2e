@@ -1,0 +1,4 @@
+export KUBE_MASTER=local
+export KUBE_MASTER_IP=
+export KUBE_MASTER_URL=
+export KUBECONFIG=/path/to/config

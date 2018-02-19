@@ -4,4 +4,4 @@ KUBE_ROOT=$(dirname "${BASH_SOURCE}")/kubernetes
 
 echo "Building Kubernetes"
 
-./build/run.sh make all
+$KUBE_ROOT/build/run.sh make all

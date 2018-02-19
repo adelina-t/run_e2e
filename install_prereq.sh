@@ -20,7 +20,7 @@ sudo add-apt-repository ppa:gophers/archive
 sudo apt-get update
 sudo apt-get install golang-$GO_VERSION-go
 
-export GOROOT="/usr/lib/go-$GO_VERSION/bin"
+export GOROOT="/usr/lib/go-$GO_VERSION"
 export PATH=$GOROOT/bin:$PATH
 
 echo "Cloning Kubernetes repo $KUBE_REPO"

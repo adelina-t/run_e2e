@@ -1,4 +1,4 @@
 export KUBE_MASTER=local
-export KUBE_MASTER_IP=
-export KUBE_MASTER_URL=
-export KUBECONFIG=/path/to/config
+export KUBE_MASTER_IP=52.161.17.81
+export KUBE_MASTER_URL=https://cb-acs1-plang-cb-acs1-c31ad1mgmt.westcentralus.cloudapp.azure.com
+export KUBECONFIG=/home/ubuntu/workspace/acs_deployment/config

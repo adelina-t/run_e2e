@@ -1,3 +1,6 @@
+#update
+sudo apt-get update -y
+
 #install docker and golang, build kubernetes
 
 set -o errexit

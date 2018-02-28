@@ -1,3 +1,8 @@
+if [ -z "$STY" ]
+then
+  exec screen -dm -S KUBE /bin/bash "$0"
+fi
+
 set -o errexit
 
 DRY_RUN=$1

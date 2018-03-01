@@ -1,12 +1,31 @@
+#check req env variables
+if [ -z "$KUBE_MASTER_IP" ]; then echo "Need to set KUBE_MASTER_IP"; exit 1; fi
+if [ -z "$KUBE_MASTER_URL" ]; then echo "Need to set KUBE_MASTER_URL"; exit 1; fi
+if [ -z "$KUBECONFIG" ]; then echo "Need to set KUBECONFIG"; exit 1; fi
+if [ -z "$KUBE_TEST_REPO_LIST" ]; then echo "Need to set KUBE_TEST_REPO_LIST"; exit 1; fi
+
+
 if [ -z "$STY" ]
 then
-  exec screen -dm -S KUBE /bin/bash "$0"
+  exec screen -dm -S KUBE /bin/bash "$0" "$1" "$2"
 fi
 
 set -o errexit
 
 DRY_RUN=$1
 FOCUS=$2
+
+while IFS= read -r line
+do
+  if [ "$TEXT" = "" ]
+  then
+    TEXT="$line"
+  else
+    TEXT="${line}|${TEXT}"
+  fi
+done < "$FOCUS"
+
+FOCUS="$TEXT"
 
 BASE_DIR=$(dirname "${BASH_SOURCE}")
 KUBE_DIR=$BASE_DIR/kubernetes

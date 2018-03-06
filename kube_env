@@ -1,5 +1,5 @@
 export KUBE_MASTER=local
 export KUBE_MASTER_IP=#masterIP
 export KUBE_MASTER_URL=https://#masterIP
-export KUBECONFIG=/path/to/config
+export KUBE_CONFIG=/path/to/config
 export KUBE_TEST_REPO_LIST=/path/to/repo/repo_list.yaml

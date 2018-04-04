@@ -17,6 +17,12 @@ FOCUS=$2
 
 while IFS= read -r line
 do
+  # skip comments in the file.
+  if [ "$line" = "" ] || [ "#" = `echo $line | cut -b 1` ]
+  then
+    continue
+  fi
+
   if [ "$TEXT" = "" ]
   then
     TEXT="$line"

@@ -4,6 +4,11 @@ if [ -z "$KUBE_MASTER_URL" ]; then echo "Need to set KUBE_MASTER_URL"; exit 1; f
 if [ -z "$KUBECONFIG" ]; then echo "Need to set KUBECONFIG"; exit 1; fi
 if [ -z "$KUBE_TEST_REPO_LIST" ]; then echo "Need to set KUBE_TEST_REPO_LIST"; exit 1; fi
 
+if [ $# -lt 2 ]
+then
+  echo "Usage: $0 <is_dry_run> <focus_tests_file>"
+  exit 1
+fi
 
 if [ -z "$STY" ]
 then

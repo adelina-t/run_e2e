@@ -46,6 +46,8 @@ function get_tests_regex() {
   echo $TEXT
 }
 
+export GINKGO_NO_COLOR=y
+
 FOCUS="`get_tests_regex $FOCUS`"
 if [[ -n "$SKIP" ]]
 then

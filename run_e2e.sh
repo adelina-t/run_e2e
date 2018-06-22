@@ -32,9 +32,8 @@ function get_tests_regex() {
       continue
     fi
 
-    # since the output will have to be a regexp, it's easier to replace any
-    # non-word character (\W) with a dot. This will also replaces spaces.
-    line=`echo $line | sed "s/\W/./g"`
+    # Convert only space to dot
+    line=`echo $line | sed "s/ /./g"`
 
     if [ "$TEXT" = "" ]
     then
@@ -46,6 +45,8 @@ function get_tests_regex() {
 
   echo $TEXT
 }
+
+export GINKGO_NO_COLOR=y
 
 FOCUS="`get_tests_regex $FOCUS`"
 if [[ -n "$SKIP" ]]

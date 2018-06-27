@@ -5,7 +5,7 @@ sudo apt-get update -y
 
 set -o errexit
 
-GO_VERSION=tip
+GO_VERSION="1.10"
 
 BASEDIR=$(dirname "${BASH_SOURCE}")
 WIN_E2E_KUBE_BRANCH="win_e2e_testing"

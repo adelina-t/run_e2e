@@ -47,6 +47,7 @@ function get_tests_regex() {
 }
 
 export GINKGO_NO_COLOR=y
+export GINKGO_PARALLEL_NODES=12
 
 FOCUS="`get_tests_regex $FOCUS`"
 if [[ -n "$SKIP" ]]

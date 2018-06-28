@@ -21,6 +21,30 @@ DRY_RUN=$1
 FOCUS=$2
 SKIP=$3
 
+GO_VERSION="1.10"
+KUBETEST_URL=https://k8swin.blob.core.windows.net/k8s-windows/testing/kubetest/kubetest_2018-06-26-09-15-47/kubetest
+
+function set_golang_env() {
+  if [ -d "/usr/lib/go-$GO_VERSION" ]; then
+    export GOROOT=/usr/lib/go-$GO_VERSION
+    export GOPATH=$HOME/go
+    export GOBIN=$GOROOT/bin
+    export PATH=$GOROOT/bin:$PATH:GOPATH/bin
+  else
+    echo "Golang not installed. To install, run install_prereq.sh"
+  fi
+}
+
+function get_kubetest() {
+  echo "Downloading Kubetest"
+  if [ -f $GOPATH/bin/kubetest ]; then
+    rm $GOPATH/bin/kubetest
+  fi
+  wget $1 -O $GOPATH/bin/kubetest
+  sudo chmod 755 $GOPATH/bin/kubetest
+  touch $GOPATH/bin/kubetest
+}
+
 function get_tests_regex() {
   local tests_file=$1
 
@@ -60,6 +84,9 @@ KUBE_DIR=$BASE_DIR/kubernetes
 E2E_RUN=hack/e2e.go
 RESULTS_DIR=$BASE_DIR/results
 mkdir -p $RESULTS_DIR
+
+set_golang_env
+get_kubetest $KUBETEST_URL
 
 ginkgo_args="--num-nodes=2 --ginkgo.dryRun=${DRY_RUN:-false} "
 

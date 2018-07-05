@@ -1,8 +1,12 @@
-#check req env variables
+#!/bin/bash
+
+set -xe -o pipefail
+
+# Check req env variables
 if [ -z "$KUBE_MASTER_IP" ]; then echo "Need to set KUBE_MASTER_IP"; exit 1; fi
 if [ -z "$KUBE_MASTER_URL" ]; then echo "Need to set KUBE_MASTER_URL"; exit 1; fi
-if [ -z "$KUBECONFIG" ]; then echo "Need to set KUBECONFIG"; exit 1; fi
-if [ -z "$KUBE_TEST_REPO_LIST" ]; then echo "Need to set KUBE_TEST_REPO_LIST"; exit 1; fi
+if [ ! -r "$KUBECONFIG" ]; then echo "Need to set KUBECONFIG"; exit 1; fi
+if [ ! -r "$KUBE_TEST_REPO_LIST" ]; then echo "Need to set KUBE_TEST_REPO_LIST"; exit 1; fi
 
 if [ $# -lt 2 ]
 then
@@ -15,14 +19,26 @@ then
   exec screen -dm -S KUBE /bin/bash "$0" "$1" "$2"
 fi
 
-set -o errexit
-
 DRY_RUN=$1
 FOCUS=$2
 SKIP=$3
 
+GO_VERSION="1.10"
+
+function set_golang_env() {
+  if [ -d "/usr/lib/go-$GO_VERSION" ]; then
+    export GOROOT=/usr/lib/go-$GO_VERSION
+    export GOPATH=$HOME/go
+    export GOBIN=$GOROOT/bin
+    export PATH=$GOROOT/bin:$PATH:GOPATH/bin
+  else
+    echo "Golang not installed. To install, run install_prereq.sh"
+    exit 2
+  fi
+}
+
 function get_tests_regex() {
-  local tests_file=$1
+  local tests_file="$1"
 
   while IFS= read -r line
   do
@@ -47,11 +63,9 @@ function get_tests_regex() {
 }
 
 export GINKGO_NO_COLOR=y
-export GINKGO_PARALLEL_NODES=12
 
 FOCUS="`get_tests_regex $FOCUS`"
-if [[ -n "$SKIP" ]]
-then
+if [[ -n "$SKIP" ]]; then
   SKIP="`get_tests_regex $SKIP`"
 fi
 
@@ -74,9 +88,11 @@ fi
 
 e2e_args=("--")
 e2e_args+=("--provider=local")
-e2e_args+=("-v")
 e2e_args+=("--test")
-e2e_args+=(--test_args="$ginkgo_args")
+e2e_args+=("--ginkgo-parallel=12")
+e2e_args+=("--test_args=\"$ginkgo_args\"")
 
-cd $KUBE_DIR
-go run $E2E_RUN "${e2e_args[@]}" | tee ../$RESULTS_DIR/acs_run_$(date +%Y_%m_%d_%H_%M)
+pushd $KUBE_DIR
+  sudo -E bash -c "PATH=$PATH && go get k8s.io/test-infra/kubetest"
+  sudo -E bash -c PATH=$PATH; go run $E2E_RUN "${e2e_args[@]}" | tee ../$RESULTS_DIR/acs_run_$(date +%Y_%m_%d_%H_%M)
+popd

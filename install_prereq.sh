@@ -9,7 +9,7 @@ GO_VERSION="1.10"
 
 BASEDIR=$(dirname "${BASH_SOURCE}")
 WIN_E2E_KUBE_BRANCH="win_e2e_testing"
-KUBE_REPO="http://github.com/adelina-t/kubernetes"
+KUBE_REPO="http://github.com/e2e-win/kubernetes"
 
 echo "Installing docker"
 sudo apt-get install -y docker.io

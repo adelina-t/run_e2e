@@ -61,7 +61,7 @@ E2E_RUN=hack/e2e.go
 RESULTS_DIR=$BASE_DIR/results
 mkdir -p $RESULTS_DIR
 
-ginkgo_args="--num-nodes=2 --ginkgo.dryRun=${DRY_RUN:-false} "
+ginkgo_args="--num-nodes=2 --node-os-distro=windows --ginkgo.dryRun=${DRY_RUN:-false} "
 
 if [[ -n "$FOCUS" ]]
 then

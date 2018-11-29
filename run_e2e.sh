@@ -32,8 +32,8 @@ function get_tests_regex() {
       continue
     fi
 
-    # Convert only space to dot
-    line=`echo $line | sed "s/ /./g"`
+    # Convert non-alphabetic characters to dot
+    line=`echo $line | sed "s/\W/./g"`
 
     if [ "$TEXT" = "" ]
     then

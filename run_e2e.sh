@@ -73,7 +73,7 @@ then
 fi
 
 e2e_args=("--")
-e2e_args+=("--provider=local")
+e2e_args+=("--provider=skeleton")
 e2e_args+=("-v")
 e2e_args+=("--test")
 e2e_args+=(--test_args="$ginkgo_args")

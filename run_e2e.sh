@@ -33,7 +33,7 @@ function get_tests_regex() {
     fi
 
     # Convert non-alphabetic characters to dot
-    line=`echo $line | sed "s/\W/./g"`
+    line=`echo "$line" | sed "s/\W/./g"`
 
     if [ "$TEXT" = "" ]
     then
@@ -74,7 +74,6 @@ fi
 
 e2e_args=("--")
 e2e_args+=("--provider=skeleton")
-e2e_args+=("-v")
 e2e_args+=("--test")
 e2e_args+=(--test_args="$ginkgo_args")
 

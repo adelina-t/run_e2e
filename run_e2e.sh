@@ -48,34 +48,29 @@ function get_tests_regex() {
 
 export GINKGO_NO_COLOR=y
 export GINKGO_PARALLEL_NODES=12
+export GINKGO_PARALLEL=n
+export GINKGO_DRYRUN=${DRY_RUN:-false}
+export DOCKER_CONFIG_FILE="/home/ubuntu/.docker/config.json"
+export KUBECTL=`which kubectl`
+export KUBERNETES_CONFORMANCE_TEST=yes
+export NUM_NODES=2
+export NODE_OS_DISTRO="windows"
 
-FOCUS="`get_tests_regex $FOCUS`"
+if [[ -n "$FOCUS" ]]
+then
+  export CONFORMANCE_TEST_FOCUS_REGEX="`get_tests_regex $FOCUS`"
+fi
 if [[ -n "$SKIP" ]]
 then
-  SKIP="`get_tests_regex $SKIP`"
+  export CONFORMANCE_TEST_SKIP_REGEX="`get_tests_regex $SKIP`"
 fi
 
 BASE_DIR=$(dirname "${BASH_SOURCE}")
 KUBE_DIR=$BASE_DIR/kubernetes
-E2E_RUN=hack/e2e.go
+E2E_RUN=hack/ginkgo-e2e.sh
 RESULTS_DIR=$BASE_DIR/results
 mkdir -p $RESULTS_DIR
 
-ginkgo_args="--num-nodes=2 --node-os-distro=windows --ginkgo.dryRun=${DRY_RUN:-false} "
-
-if [[ -n "$FOCUS" ]]
-then
-  ginkgo_args+="--ginkgo.focus=${FOCUS} "
-fi
-if [[ -n "$SKIP" ]]
-then
-  ginkgo_args+="--ginkgo.skip=${SKIP} "
-fi
-
-e2e_args=("--")
-e2e_args+=("--provider=skeleton")
-e2e_args+=("--test")
-e2e_args+=(--test_args="$ginkgo_args")
-
 cd $KUBE_DIR
-go run $E2E_RUN "${e2e_args[@]}" | tee ../$RESULTS_DIR/acs_run_$(date +%Y_%m_%d_%H_%M)
+
+${E2E_RUN} | tee ../$RESULTS_DIR/acs_run_$(date +%Y_%m_%d_%H_%M)
